@@ -1,4 +1,8 @@
 version: '2'
+
+volumes:
+  usbstorage:
+
 services:
   wpe:
     restart: always
@@ -24,3 +28,10 @@ services:
     build: ./photos
     ports:
       - "8888:8888"
+    volumes:
+      - usbstorage:/usr/src/app~/views/usbstorage
+  usbdrive:
+    build: ./usbdrive
+    privileged: true
+    volumes:
+      - usbstorage:/usbstorage

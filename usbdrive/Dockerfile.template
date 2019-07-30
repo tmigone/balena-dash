@@ -1,0 +1,18 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine
+LABEL author "Tomás Migone"
+LABEL maintainer "tomasmigone@gmail.com"
+
+# Enable udev for detection of dynamically plugged devices
+ENV UDEV=on
+COPY udev/usb-plug.rules /etc/udev/rules.d/usb-plug.rules
+
+# Install dependencies
+RUN install_packages rsync findmnt
+
+# Copy scripts
+WORKDIR /app
+COPY . .
+RUN chmod +x /app/scripts/start.sh
+RUN chmod +x /app/scripts/usb-plugged.sh
+
+CMD [ "/app/scripts/start.sh" ]

@@ -282,7 +282,25 @@ function fetchImages(albumURL) {
         setImagesArray(images);
         console.log("error:", error);
       });
-  } else {
+  } 
+  else if (albumURL === "USBDRIVE") {
+    try {
+      let dirents = fs.readdirSync('/usr/src/app~/views/usbstorage', { withFileTypes: true });
+      if (dirents.length > 0) {
+        let files = dirents.filter(d => !d.isDirectory() && d.isFile()).map(d => d.name).filter(f => !(/(^|\/)\.[^\/\.]/g).test(f)).filter(f => ['.jpg', '.png', '.jpeg'].includes(path.extname(f))).map(f => `views/usbstorage/${f}`);
+        setImagesArray(files);
+      } else {
+        images.push("views/album_url_error.png");
+        setImagesArray(images);
+        console.log("No images on views/usbstorage folder.");        
+      }
+    } catch (error) {
+      images.push("views/album_url_error.png");
+      setImagesArray(images);
+      console.log("error:", error);
+    }
+  }
+  else {
     images.push("views/album_url_error.png");
     setImagesArray(images);
     console.log("error: Could not parse album.");

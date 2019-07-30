@@ -124,7 +124,7 @@ Create a photo album and copy the share url, similar to `https://www.icloud.com/
 | COMPRESS_QUALITY        | * Image compression                                                                                                                                   | 0 - 100                                        | 90            |
 
     * Only available for iCloud photos
-    ** When using ```GALLERY_URL=USBDRIVE``` make sure to update ```CRON_SCHEDULE``` accordingly or else image changes will only be picked up at reboot.
+    ** When using GALLERY_URL=USBDRIVE make sure to update CRON_SCHEDULE accordingly or else image changes will only be picked up at reboot.
 
 Note that after some performance tests on the Raspberry Pi 2 & 3, the combination of `GALLERY_IMAGE_STYLE = contain` and `GALLERY_EFFECT = fade or kenburns` can make the transition effects choppy.
 

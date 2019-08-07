@@ -109,13 +109,20 @@ On the [dropbox](https://www.dropbox.com/home) website, go to the folder that co
 
 Create a photo album and copy the share url, similar to `https://www.icloud.com/sharedalbum/#ALBUM-ID`
 
+#### USB drive Photo Album
+
+Place your photos on a USB stick and plug it into the Raspberry Pi. Each time all previous existing photos will be removed and replaced by the new ones. 
+- Set ```GALLERY_URL``` to ```USBDRIVE``` to use this mode.
+- Make sure to update ```CRON_SCHEDULE``` accordingly or else image changes will only be picked up at reboot.
+
+
 #### Setting up the photo album
 
 * On balenaCloud, go to **Device variables D(x)** and add the following:
 
 | ENV VAR                 | Description                                                                                                                                           | Options                                        | Default       |
 |-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|---------------|
-| GALLERY_URL             | Gallery URL for **google photos**, **dropbox images**, or **apple photos**. Set it to ```USBDRIVE``` to pick gallery from USB stick.**                                                                            |                                                |               |
+| GALLERY_URL             | Gallery URL for **google photos**, **dropbox images**, **apple photos** or **usb drive**.                                                                             |                                                |               |
 | GALLERY_SLIDESHOW_DELAY | Slideshow delay in milliseconds                                                                                                                       |                                                | 10000         |
 | GALLERY_IMAGE_STYLE     | `Contain` shows the entire image on the screen. `Cover` zooms the image filling the entire screen.                                                    | contain,  cover                                | cover         |
 | GALLERY_EFFECT          | Transition effects                                                                                                                                    | fade,  horizontal,  vertical,  kenburns, false | fade          |
@@ -124,7 +131,6 @@ Create a photo album and copy the share url, similar to `https://www.icloud.com/
 | COMPRESS_QUALITY        | * Image compression                                                                                                                                   | 0 - 100                                        | 90            |
 
     * Only available for iCloud photos
-    ** When using GALLERY_URL=USBDRIVE make sure to update CRON_SCHEDULE accordingly or else image changes will only be picked up at reboot.
 
 Note that after some performance tests on the Raspberry Pi 2 & 3, the combination of `GALLERY_IMAGE_STYLE = contain` and `GALLERY_EFFECT = fade or kenburns` can make the transition effects choppy.
 

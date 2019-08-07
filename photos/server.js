@@ -284,15 +284,21 @@ function fetchImages(albumURL) {
       });
   } 
   else if (albumURL === "USBDRIVE") {
+    let usbPhotos = listImagesInDirSync('/usbstorage')
+    let currentPhotos = listImagesInDirSync(path.join(path.dirname(require.main.filename), 'views/usbstorage'))
+    
     try {
-      let dirents = fs.readdirSync('/usr/src/app~/views/usbstorage', { withFileTypes: true });
-      if (dirents.length > 0) {
-        let files = dirents.filter(d => !d.isDirectory() && d.isFile()).map(d => d.name).filter(f => !(/(^|\/)\.[^\/\.]/g).test(f)).filter(f => ['.jpg', '.png', '.jpeg'].includes(path.extname(f))).map(f => `views/usbstorage/${f}`);
-        setImagesArray(files);
-      } else {
+      if (usbPhotos.length > 0) {
+        // Only update photos if there are new ones on /usbstorage
+        currentPhotos.map(p => fs.unlinkSync(p))
+        usbPhotos.map(p => fs.copyFileSync(p, `views/usbstorage/${path.basename(p)}`))
+        let newPhotos = listImagesInDirSync('views/usbstorage')
+        setImagesArray(newPhotos);
+        console.log(`Got ${newPhotos.length} image(s) from /usbstorage.`);
+      } else if (currentPhotos.length === 0) {
         images.push("views/album_url_error.png");
         setImagesArray(images);
-        console.log("No images on views/usbstorage folder.");        
+        console.log("No images found on views/usbstorage folder.");
       }
     } catch (error) {
       images.push("views/album_url_error.png");
@@ -547,4 +553,17 @@ function listImagesInDir(directory) {
   });
 
   return images;
+}
+
+function listImagesInDirSync (directory) {
+  if (!fs.existsSync(directory)) return [];
+  let newDirents = fs.readdirSync(directory, { withFileTypes: true });
+  let files = newDirents
+    .filter(d => !d.isDirectory() && d.isFile())                                      // remove directories
+    .map(d => d.name)                                                                 // file name
+    .filter(f => !(/(^|\/)\.[^\/\.]/g).test(f))                                       // remove files starting with . (macOS .DS_STORE for example)
+    .filter(f => [".jpg", ".jpeg", ".gif", ".png", ".bmp"].includes(path.extname(f))) // remove files that are not an image
+    .map(f => `${directory}/${f}`);                                                   // rebuild file path
+
+  return files;
 }
